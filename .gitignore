@@ -1,0 +1,12 @@
+# Large datasets
+Daily_features.csv
+Combined_features_daily.csv
+Combined_features_daily_labeled.csv
+Uttrakhand/Combined_features.csv
+
+# Large DEM file
+Uttrakhand/DEM_UK.tif
+
+# Python cache
+__pycache__/
+*.pyc

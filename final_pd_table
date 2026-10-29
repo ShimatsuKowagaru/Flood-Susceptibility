@@ -1,0 +1,42 @@
+import pandas as pd
+
+events = pd.read_csv(
+    r"D:\Flood Susceptibility\events_places_geocoded.csv",
+    low_memory=False
+)
+
+included = events[
+    events["status"].astype(str).str.strip().str.lower() == "include"
+].copy()
+
+valid_coords = included[
+    included["lat"].notna() &
+    included["lon"].notna()
+]
+
+eligible = valid_coords[
+    valid_coords["geocode_confidence"].isin(["A", "B"]) &
+    (
+        valid_coords["district_match"].astype(str)
+        .str.lower() == "true"
+    )
+]
+
+print("Total event-place records:", len(events))
+print("Total unique events:", events["event_id"].nunique())
+
+print("\nIncluded event-place records:", len(included))
+print("Unique included events:", included["event_id"].nunique())
+
+print("\nIncluded records with coordinates:", len(valid_coords))
+print("Included records missing coordinates:",
+      len(included) - len(valid_coords))
+
+print("\nEligible records after quality filtering:", len(eligible))
+print("Unique eligible events:", eligible["event_id"].nunique())
+
+print("\nGeocoding confidence:")
+print(included["geocode_confidence"].value_counts(dropna=False))
+
+print("\nDistrict match:")
+print(included["district_match"].value_counts(dropna=False))
